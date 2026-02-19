@@ -4,6 +4,7 @@
 #  Distributed under the terms of the 3-clause BSD License.
 #-----------------------------------------------------------------------------
 
+import atexit
 import subprocess
 
 def theme():
@@ -41,5 +42,6 @@ def listener(callback):
         stdout=subprocess.PIPE,
         universal_newlines=True,
     ) as p:
+        atexit.register(p.terminate)
         for line in p.stdout:
             callback('Dark' if '-dark' in line.strip().removeprefix("gtk-theme: '").removesuffix("'").lower() else 'Light')
